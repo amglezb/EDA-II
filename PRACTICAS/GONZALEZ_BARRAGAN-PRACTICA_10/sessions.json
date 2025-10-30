@@ -1,0 +1,42 @@
+[
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:01:36.816741",
+    "isValid": false
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:01:36.817974",
+    "isValid": true
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:01:49.786795",
+    "isValid": false
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:01:49.787911",
+    "isValid": true
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:06:07.452025",
+    "isValid": false
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T13:06:07.453660",
+    "isValid": true
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T21:46:15.811842",
+    "isValid": false
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-29T21:46:15.812888",
+    "isValid": true
+  }
+]
