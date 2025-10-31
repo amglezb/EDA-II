@@ -1,107 +1,72 @@
 [
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:01:36.816741",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:50:51.832754",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:54:02.322211",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:56:45.514083",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:27.388625",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:36.897233",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:01:36.817974",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:01:49.786795",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:38.883161",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:01:49.787911",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:06:07.452025",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:39.773669",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T13:06:07.453660",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T21:46:15.811842",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:40.680881",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T21:46:15.812888",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T21:55:47.195309",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:41.582840",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T21:55:47.196256",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T22:15:01.486462",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:42.335433",
     "isValid": false
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T22:15:01.487457",
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:43.964937",
+    "isValid": false
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:57:56.183906",
+    "isValid": false
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T17:58:14.212576",
     "isValid": true
   },
   {
-    "user_id": "1",
-    "datetime": "2025-10-29T22:16:13.434229",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-29T22:16:45.996226",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:34:00.610134",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:44:26.358883",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:44:54.450535",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:48:15.903209",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:49:23.320140",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:49:32.054358",
-    "isValid": true
-  },
-  {
-    "user_id": "1",
-    "datetime": "2025-10-30T09:49:39.927643",
+    "user_id": "0",
+    "datetime": "2025-10-30T18:04:05.270114",
     "isValid": true
   }
 ]
