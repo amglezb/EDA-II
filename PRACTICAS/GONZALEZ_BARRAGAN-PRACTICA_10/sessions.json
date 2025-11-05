@@ -68,5 +68,130 @@
     "user_id": "0",
     "datetime": "2025-10-30T18:04:05.270114",
     "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T22:58:12.435634",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T23:38:19.260535",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T23:52:11.675074",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-30T23:53:45.498445",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:02:04.180762",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:02:39.793245",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:02:47.098535",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:18:14.474855",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:18:47.524449",
+    "isValid": false
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:20:17.759430",
+    "isValid": false
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:20:24.530455",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:20:43.925602",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T00:21:12.855299",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T08:55:32.334623",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T09:01:45.223665",
+    "isValid": true
+  },
+  {
+    "user_id": "1",
+    "datetime": "2025-10-31T09:02:03.147454",
+    "isValid": false
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T09:18:29.379380",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T09:18:52.962755",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T09:31:57.256076",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T09:33:24.361536",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T10:11:35.872618",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T10:13:28.336178",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T10:15:51.567429",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T10:16:51.714254",
+    "isValid": true
+  },
+  {
+    "user_id": "0",
+    "datetime": "2025-10-31T10:17:49.393026",
+    "isValid": true
   }
 ]
