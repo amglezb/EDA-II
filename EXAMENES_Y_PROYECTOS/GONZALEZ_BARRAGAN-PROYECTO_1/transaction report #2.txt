@@ -1,0 +1,43 @@
+Report: Transactions between $100.0 and $600.0
+User: Billie Eilish
+
+ID: 846
+Category: Food
+Amount: $144.9
+Date: 2024-04-23
+Description: Pago de servicios
+Deductible: No
+Type: Income
+--------------------------------------------------
+ID: 630
+Category: Education
+Amount: $164.3
+Date: 2025-01-16
+Description: Pago de servicios
+Deductible: No
+Type: Income
+--------------------------------------------------
+ID: 595
+Category: Donation
+Amount: $272.1
+Date: 2024-05-09
+Description: Compra en línea
+Deductible: No
+Type: Income
+--------------------------------------------------
+ID: 59
+Category: Other
+Amount: $519.4
+Date: 2023-02-12
+Description: Pago de servicios
+Deductible: Yes
+Type: Expense
+--------------------------------------------------
+ID: 13
+Category: Transport
+Amount: $543.7
+Date: 2025-02-22
+Description: Compra de comestibles
+Deductible: No
+Type: Income
+--------------------------------------------------

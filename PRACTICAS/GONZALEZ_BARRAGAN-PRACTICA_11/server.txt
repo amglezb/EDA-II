@@ -1,0 +1,5 @@
+gcc -fopenmp 02_hello_parallel.c -o 02_hello_parallel
+
+ssh -oHostKeyAlgorithms=+ssh-dss -oPubkeyAcceptedAlgorithms=+ssh-rsa edaII04alu12@132.248.59.142 -p 99
+
+./02_hello_parallel
