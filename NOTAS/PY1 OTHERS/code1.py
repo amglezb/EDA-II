@@ -2,13 +2,13 @@ import os
 import json
 from datetime import datetime
 
-class User:
+class User: # sip
     def __init__(self, user_id, name, password):
         self.id = user_id
         self.name = name
         self.password = password
 
-class Transaction:
+class Transaction: # sip
     def __init__(self, trans_id, user_id, amount, category, date, is_deductible, is_income, description):
         self.id = trans_id
         self.user_id = user_id
@@ -19,12 +19,12 @@ class Transaction:
         self.is_income = is_income
         self.description = description
 
-class Data:
+class Data: #sip
     def __init__(self, key, value):
         self.key = key
         self.value = value
 
-class BTreeNode:
+class BTreeNode: # sip
     def __init__(self, t, leaf):
         self.t = t
         self.keys = [None] * (2 * t - 1)
@@ -129,7 +129,7 @@ class BTreeNode:
         if not self.leaf and i + 1 < len(self.C) and self.C[i + 1]:
             self.C[i + 1].exact_search(key, result_list)
 
-class BTree:
+class BTree: # sip
     def __init__(self, t):
         self.root = None
         self.t = t
@@ -427,42 +427,26 @@ class FileController:
         return tabla[-1]
 
 class System:
-    def __init__(self):
+    def __init__(self): # sip
         self.files = FileController()
         self.current_user = None
 
-    def login(self, user_id=None, password=None):
-        # prevenir doble login
-        if self.current_user:
-            print(f"⚠️ User {self.current_user.name} is already logged in.")
-            return True
-
-        try:
-            if user_id is None:
-                user_id = int(input("Enter your ID: "))
-            if password is None:
-                password = input("Enter your Password: ")
-        except ValueError:
-            print("❌ Invalid ID format. Please enter a numeric value.\n")
-            return False
-
+    def login(self, user_id, password): # sip
         user = self.files.verify_user(user_id, password)
         print()
         if user:
             self.current_user = user
-            # cargar árboles secundarios para este usuario
             self.files.load_user_secondary_trees(user.id)
-            print(f"\t✅ Welcome {user.name}\n")
+            print(f"\n!!!!! Welcome {user.name} ¡¡¡¡¡\n")
             return True
         else:
-            print("\t❌ Invalid user ID or password.\n")
+            print("\n!!!!! Invalid user ID or password. !!!!!\n")
             return False
 
-    def logout(self):
+    def logout(self): # sip
         if self.current_user:
-            print(f"\t----- Logged out for {self.current_user.name}\n\n")
+            print(f"\n!!!!! Logged out for {self.current_user.name} !!!!!\n\n")
             self.current_user = None
-            # resetear árboles secundarios
             self.files.amount_tree = BTree(2)
             self.files.category_tree = BTree(2)
             self.files.date_tree = BTree(2)
@@ -470,7 +454,7 @@ class System:
             self.files.is_income_tree = BTree(2)
             self.files.current_user_id = None
 
-    def show_menu(self):
+    def show_menu(self): # sip
         print("\n\t\t\t=============== SYSTEM MENU ===============")
         print("\t\t\t1. Register New Transaction")
         print("\t\t\t2. View Transaction Data")
@@ -479,203 +463,188 @@ class System:
         print("\t\t\t5. Generate Transaction Report")
         print("\t\t\t6. Calculate Taxes (ISR)")
         print("\t\t\t7. Logout")
-        try:
-            option = int(input("Select an option: "))
-        except ValueError:
-            print("Invalid input. Please enter a number.")
+        try: option = int(input("Select an option: "))
+        except:
+            print("\n!!!!! Invalid input. Please enter a number. !!!!!\n")
             option = 0
         return option
 
-    def register_transaction(self):
+    def register_transaction(self): # loop de validación
         if not self.current_user:
-            print("⚠️ You must log in first.")
+            print("\n!!!!! You must log in first. !!!!!\n")
             return
 
         try:
             amount = float(input("Amount: "))
             if amount <= 0:
-                print("❌ Amount must be greater than 0.")
+                print("\n!!!!! Amount must be greater than 0. !!!!!\n")
                 return
-        except ValueError:
-            print("❌ Invalid input. Please enter a numeric amount.")
+        except:
+            print("\n!!!!! Invalid input. Please enter a numeric amount. !!!!!\n")
             return
 
         try:
             is_deductible = int(input("Is deductible? (0 -> No, 1 -> Yes): "))
             if is_deductible not in [0, 1]:
-                print("❌ Invalid option. Please enter 0 or 1.")
+                print("\n!!!!! Invalid option. Please enter 0 or 1. !!!!!\n")
                 return
 
             is_income = int(input("Is income? (0 -> Expense, 1 -> Income): "))
             if is_income not in [0, 1]:
-                print("❌ Invalid option. Please enter 0 or 1.")
+                print("\n!!!!! Invalid option. Please enter 0 or 1. !!!!!\n")
                 return
-        except ValueError:
-            print("❌ Invalid input. Please enter numbers only.")
+        except:
+            print("\n!!!!! Invalid input. Please enter numbers only. !!!!!\n")
             return
 
-        categories = ["Salary", "Donation", "Investment", "Housing", "Food", "Health",
-                      "Transport", "Education", "Debts", "Other"]
+        categories = ["Salary", "Donation", "Investment", "Housing", "Food", "Health", "Transport", "Education", "Debts", "Other"]
         print("\nAvailable Categories:")
         for i, cat in enumerate(categories, 1):
             print(f"{i}. {cat}")
         try:
             cat_choice = int(input("Select category: "))
             if cat_choice < 1 or cat_choice > len(categories):
-                print("❌ Invalid category number.")
+                print("\n!!!!! Invalid category number. !!!!!\n")
                 return
             category = categories[cat_choice - 1]
-        except ValueError:
-            print("❌ Invalid input. Please enter a number.")
+        except:
+            print("\n!!!!! Invalid input. Please enter a number. !!!!!\n")
             return
 
         description = input("Description: ").strip()
         if not description:
-            print("⚠️ Empty description. Transaction will be saved without description.")
+            print("\n!!!!! Empty description. Transaction will be saved without description. !!!!!\n")
 
         trans_id = self.files.get_next_id()
         date = datetime.now().strftime("%Y-%m-%d")
-
-        new_trans = Transaction(trans_id, self.current_user.id, amount, category, date,
-                                is_deductible, is_income, description)
-
+        new_trans = Transaction(trans_id, self.current_user.id, amount, category, date, is_deductible, is_income, description)
         self.files.save_transaction(new_trans)
-        print(f"✅ Transaction #{trans_id} registered successfully.")
+        print(f"\n!!!!! Transaction #{trans_id} registered successfully. !!!!!\n")
 
-    def view_transaction(self):
+    def view_transaction(self): # sip
         try:
             trans_id = int(input("Enter transaction ID: "))
-        except ValueError:
-            print("❌ Invalid ID.")
+        except:
+            print("\n!!!!! Invalid ID. Please enter a number. !!!!!\n")
             return
         trans = self.files.find_transaction(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print("Transaction not found or not owned by this user.")
+            print("\n!!!!! Transaction not found or unavailable. !!!!!\n")
             return
         print(f"\n--- Transaction #{trans.id} ---\nCategory: {trans.category}\nAmount: ${trans.amount}\nDate: {trans.date}\nDeductible: {'Yes' if trans.is_deductible else 'No'}\nType: {'Income' if trans.is_income else 'Expense'}\nDescription: {trans.description}")
 
-    def modify_transaction(self):
+    def modify_transaction(self): # sip
         try:
             trans_id = int(input("Enter transaction ID: "))
-        except ValueError:
-            print("❌ Invalid ID.")
+        except:
+            print("\n!!!!! Invalid ID. Please enter a number. !!!!!\n")
             return
         trans = self.files.find_transaction(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print("❌ Transaction not found or not owned by this user.")
+            print("\n!!!!! Transaction not found or unavailable. !!!!!\n")
             return
 
         while True:
             print("\nSelect field to modify:\n1. Amount\n2. Is Deductible\n3. Is Income\n4. Category\n5. Description\n6. Exit")
             try:
                 op = int(input("Option: "))
-            except ValueError:
-                print("Invalid input.")
+            except:
+                print("\n!!!!! Invalid input. Please enter a number. !!!!!\n")
                 continue
             if op == 6:
                 break
             field_map = {1: "amount", 2: "is_deductible", 3: "is_income", 4: "category", 5: "description"}
             field = field_map.get(op)
             if not field:
-                print("Invalid option.")
+                print("\n!!!!! Invalid option. Please enter a number between 1 and 6. !!!!!\n")
                 continue
 
             new_value = input(f"Enter new value for {field}: ")
-            # Validaciones
             if field == "amount":
                 try:
                     new_value_f = float(new_value)
                     if new_value_f <= 0:
-                        print("❌ Amount must be greater than 0.")
+                        print("\n!!!!! Amount must be greater than 0. !!!!!\n")
                         continue
                     new_value = new_value_f
-                except ValueError:
-                    print("❌ Invalid number.")
+                except:
+                    print("\n!!!!! Invalid number. !!!!!\n")
                     continue
             elif field in ["is_deductible", "is_income"]:
                 try:
                     new_value_i = int(new_value)
                     if new_value_i not in [0, 1]:
-                        print("❌ Must be 0 or 1.")
+                        print("\n!!!!! Must be 0 or 1. !!!!!\n")
                         continue
                     new_value = new_value_i
-                except ValueError:
-                    print("❌ Invalid input. Enter 0 or 1.")
+                except:
+                    print("\n!!!!! Invalid input. Enter 0 or 1. !!!!!\n")
                     continue
             elif field == "category":
                 categories = ["Salary", "Donation", "Investment", "Housing", "Food", "Health", "Transport", "Education", "Debts", "Other"]
                 try:
                     new_idx = int(new_value)
                     if new_idx < 1 or new_idx > len(categories):
-                        print("❌ Invalid category number.")
+                        print("\n!!!!! Invalid category number. !!!!!\n")
                         continue
                     new_value = categories[new_idx - 1]
-                except ValueError:
-                    print("❌ Invalid input. Please enter a number corresponding to category.")
+                except:
+                    print("\n!!!!! Invalid input. Please enter a number corresponding to category. !!!!!\n")
                     continue
 
             if self.files.update_transaction(trans_id, field, new_value):
-                print("Field updated successfully.")
+                print("\n!!!!! Field updated successfully. !!!!!\n")
             else:
-                print("Update failed.")
+                print("\n!!!!! Update failed. !!!!!\n")
 
-    def delete_transaction(self):
+    def delete_transaction(self): # sip
         try:
             trans_id = int(input("Enter transaction ID to delete: "))
-        except ValueError:
-            print("❌ Invalid ID.")
+        except:
+            print("\n!!!!! Invalid ID. Please enter a number. !!!!!\n")
             return
         trans = self.files.find_transaction(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print("Transaction not found or not owned by this user.")
+            print("\n!!!!! Transaction not found or unavailable. !!!!!\n")
             return
 
         if self.files.delete_transaction(trans_id):
-            print(f"Transaction #{trans_id} deleted successfully.")
+            print(f"\n!!!!! Transaction #{trans_id} deleted successfully. !!!!!\n")
         else:
-            print("Transaction not found.")
+            print("\n!!!!! Transaction not found. !!!!!\n")
 
-    def generate_report(self):
+    def generate_report(self): # ordenar solo por amount
         if not self.current_user:
-            print("⚠️ You must log in first to generate a report.")
+            print("\n!!!!! You must log in first to generate a report. !!!!!\n")
             return
 
-        # Verificar que existan transacciones
         all_trans = self.files.transaction_tree.traverse()
         if not all_trans:
-            print("⚠️ There are no transactions available to report.")
+            print("\n!!!!! There are no transactions available to report. !!!!!\n")
             return
 
-        print("\n===== GENERATE ADVANCED REPORT =====")
+        print("\n===== GENERATE REPORT =====")
         print("You can filter transactions by multiple criteria.\n")
 
-        all_results = None                 # conjunto acumulado de IDs
-        applied_filters = []               # lista de sets de resultados individuales
-        combined_title = []                # descripciones de filtros aplicados
+        all_results = None
+        applied_filters = []
+        combined_title = []
 
         while True:
-            print("\nSelect a filter criterion:")
-            print("1. Amount range")
-            print("2. Category")
-            print("3. Date range")
-            print("4. Is Deductible")
-            print("5. Is Income")
-            print("7. Undo last filter")
-            print("6. Done (generate report)")
+            print("\nSelect a filter criterion:\n1. Amount range\n2. Category\n3. Date range\n4. Is Deductible\n5. Is Income\n7. Undo last filter\n6. Done (generate report)")
 
             try:
                 op = int(input("Option: "))
-            except ValueError:
+            except:
                 print("Invalid input.")
                 continue
 
             if op == 6:
                 break
-
-            # === Undo last filter ===
+            
             if op == 7:
                 if not applied_filters:
-                    print("⚠️ No filters to undo.")
+                    print("\n!!!!! No filters to undo. !!!!!\n")
                     continue
                 removed_filter = combined_title.pop()
                 applied_filters.pop()
@@ -683,37 +652,35 @@ class System:
                     all_results = set.intersection(*applied_filters)
                 else:
                     all_results = None
-                print(f"↩️  Filter undone: {removed_filter}")
+                print(f"\n!!!!! Filter undone: {removed_filter} !!!!!\n")
                 if all_results:
-                    print(f"→ Remaining results: {len(all_results)} transactions")
+                    print(f"\n!!!!! Remaining results: {len(all_results)} transactions !!!!!\n")
                 else:
-                    print("No filters active now.")
+                    print("\n!!!!! No filters active now. !!!!!\n")
                 continue
 
             current_set = set()
             title_part = ""
 
-            # === Amount range ===
             if op == 1:
                 try:
                     min_a = float(input("Minimum amount: "))
                     max_a = float(input("Maximum amount: "))
                     if max_a < min_a:
-                        print("❌ Invalid range: maximum amount must be greater than or equal to minimum amount.")
+                        print("\n!!!!! Invalid range: maximum amount must be greater than or equal to minimum amount. !!!!!\n")
                         continue
-                except ValueError:
-                    print("Invalid input. Please enter numeric values.")
+                except:
+                    print("\n!!!!! Invalid input. Please enter numeric values. !!!!!\n")
                     continue
 
                 found = [d.value for d in self.files.amount_tree.range_search(min_a, max_a)]
                 current_set = {t.id for t in found}
                 title_part = f"Amount ${min_a}–${max_a}"
 
-            # === Category ===
             elif op == 2:
                 all_cats = sorted(list({d.key for d in self.files.category_tree.traverse()}))
                 if not all_cats:
-                    print("No categories found for this user.")
+                    print("\n!!!!! No categories found for this user. !!!!!\n")
                     continue
                 print("\nAvailable categories:")
                 for i, cat in enumerate(all_cats, start=1):
@@ -721,17 +688,16 @@ class System:
                 try:
                     selected = int(input("Select a category number: "))
                     if selected < 1 or selected > len(all_cats):
-                        print("Invalid selection.")
+                        print("\n!!!!! Invalid selection. !!!!!\n")
                         continue
                     cat = all_cats[selected - 1]
-                except ValueError:
-                    print("Invalid input.")
+                except:
+                    print("\n!!!!! Invalid input. !!!!!\n")
                     continue
                 found = [d.value for d in self.files.category_tree.exact_search(cat)]
                 current_set = {t.id for t in found}
                 title_part = f"Category '{cat}'"
 
-            # === Date range ===
             elif op == 3:
                 start = input("From (YYYY-MM-DD): ")
                 end = input("To (YYYY-MM-DD): ")
@@ -739,25 +705,23 @@ class System:
                     start_dt = datetime.strptime(start, "%Y-%m-%d")
                     end_dt = datetime.strptime(end, "%Y-%m-%d")
                     if end_dt < start_dt:
-                        print("❌ Invalid range: end date must be the same or after start date.")
+                        print("\n!!!!! Invalid range: end date must be the same or after start date. !!!!!\n")
                         continue
-                except ValueError:
-                    print("❌ Invalid date format. Please use YYYY-MM-DD.")
+                except:
+                    print("\n!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!\n")
                     continue
 
                 found = [d.value for d in self.files.date_tree.range_search(start, end)]
-                # asegurar que sean del usuario actual (doble check)
                 found = [t for t in found if t.user_id == self.current_user.id]
                 current_set = {t.id for t in found}
                 title_part = f"Dates {start}–{end}"
 
-            # === Deductible ===
             elif op == 4:
                 print("1. Only Deductible\n2. Only Not Deductible\n3. Both")
                 try:
                     sel_d = int(input("Select option: "))
-                except ValueError:
-                    print("Invalid input.")
+                except:
+                    print("\n!!!!! Invalid input. !!!!!\n")
                     continue
 
                 if sel_d == 1:
@@ -775,19 +739,18 @@ class System:
                     current_set = {t.id for t in all_found}
                     title_part = "Both deductible and not deductible"
                 else:
-                    print("Invalid selection.")
+                    print("\n!!!!! Invalid selection. !!!!!\n")
                     continue
 
-            # === Income / Expense ===
             elif op == 5:
                 print("1. Income\n2. Expense\n3. Both")
                 try:
                     sel = int(input("Select type: "))
                     if sel not in [1, 2, 3]:
-                        print("Invalid option.")
+                        print("\n!!!!! Invalid option. !!!!!\n")
                         continue
-                except ValueError:
-                    print("Invalid input.")
+                except:
+                    print("\n!!!!! Invalid input. !!!!!\n")
                     continue
                 if sel == 3:
                     found_income = [d.value for d in self.files.is_income_tree.exact_search(1)]
@@ -801,10 +764,9 @@ class System:
                     title_part = "Income" if sel == 1 else "Expense"
 
             else:
-                print("Invalid option.")
+                print("\n!!!!! Invalid option. !!!!!\n")
                 continue
 
-            # === Apply filter ===
             applied_filters.append(current_set)
             combined_title.append(title_part)
 
@@ -813,28 +775,23 @@ class System:
             else:
                 all_results = current_set
 
-            print(f"✅ Filter applied: {title_part}")
-            print(f"→ Remaining results: {len(all_results)} transactions")
+            print(f"\n!!!!! Filter applied: {title_part} !!!!!\n")
+            print(f"\n!!!!! Remaining results: {len(all_results)} transactions !!!!!\n")
 
             another = input("Add another filter? (y/n): ").strip().lower()
             if another != "y":
                 break
 
-        # === No results ===
         if not all_results:
-            print("\nNo transactions found with the selected filters.")
+            print("\n!!!!! No transactions found with the selected filters. !!!!!\n")
             return
 
-        # === Get matching transactions ===
-        results = [d.value for d in self.files.transaction_tree.traverse()
-                   if d.value.id in all_results and d.value.user_id == self.current_user.id]
-        # Preguntar criterio de orden
+        results = [d.value for d in self.files.transaction_tree.traverse() if d.value.id in all_results and d.value.user_id == self.current_user.id]
         sort_key = input("Sort report by 'amount' or 'date'? (default amount): ").strip().lower()
         if sort_key not in ["amount", "date"]:
             sort_key = "amount"
         results = self.files.merge_sort(results, sort_key)
 
-        # === Show results ===
         print("\n\n=== Filtered Transactions ===")
         for t in results:
             print(f"\nID: {t.id} | Category: {t.category} | Amount: ${t.amount} | Date: {t.date}")
@@ -842,17 +799,14 @@ class System:
             print(f"Description: {t.description}")
             print("-" * 60)
 
-        # === Ask for export ===
         choice = input("\nGenerate a text report file? (y/n): ").strip().lower()
         if choice != "y":
-            print("Report generation canceled.")
+            print("\n!!!!! Report generation canceled. !!!!!\n")
             return
 
-        # === Generate file ===
         existing_reports = [f for f in os.listdir() if f.startswith("transaction report #")]
         report_num = len(existing_reports) + 1
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        filename = f"transaction report #{report_num} - {timestamp}.txt"
+        filename = f"transaction report #{report_num}.txt"
 
         with open(filename, "w", encoding="utf-8") as f:
             f.write("Advanced Report\n")
@@ -864,11 +818,11 @@ class System:
                         f"Type: {'Income' if t.is_income else 'Expense'}\n")
                 f.write("-" * 50 + "\n")
 
-        print(f"\n✅ Report file generated successfully: {filename}")
+        print(f"\n!!!!! Report file generated successfully: {filename} !!!!!\n")
 
-    def calculate_taxes(self):
+    def calculate_taxes(self): # sip
         if not self.current_user:
-            print("⚠️ You must log in first.")
+            print("\n!!!!! You must log in first. !!!!!\n")
             return
 
         start = input("Enter start date (YYYY-MM-DD): ")
@@ -877,53 +831,47 @@ class System:
             start_dt = datetime.strptime(start, "%Y-%m-%d")
             end_dt = datetime.strptime(end, "%Y-%m-%d")
             if end_dt < start_dt:
-                print("❌ Invalid range: end date must be after start date.")
+                print("\n!!!!! Invalid range: end date must be after start date. !!!!!\n")
                 return
-        except ValueError:
-            print("❌ Invalid date format. Please use YYYY-MM-DD.")
+        except:
+            print("\n!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!\n")
             return
 
-        # Buscar transacciones del usuario dentro del rango (usar árbol optimizado)
         found = [d.value for d in self.files.date_tree.range_search(start, end)]
-        # asegurar que sean del usuario actual
         all_trans = [t for t in found if t.user_id == self.current_user.id]
 
         if not all_trans:
-            print("⚠️ No transactions found in this range.")
+            print("\n!!!!! No transactions found in this range. !!!!!\n")
             return
 
-        # Calcular ingresos y deducciones
         total_income = sum(t.amount for t in all_trans if t.is_income == 1)
         total_deductions = sum(t.amount for t in all_trans if t.is_deductible == 1 and t.is_income == 0)
         net_income = total_income - total_deductions
 
-        print(f"\n💰 Total Income: ${total_income:,.2f}")
-        print(f"🧾 Total Deductions: ${total_deductions:,.2f}")
-        print(f"➡️ Net Taxable Income: ${net_income:,.2f}\n")
+        print(f"\nTotal Income: ${total_income:,.2f}")
+        print(f"\tTotal Deductions: ${total_deductions:,.2f}")
+        print(f"\tNet Taxable Income: ${net_income:,.2f}\n")
 
         if net_income <= 0:
-            print("✅ No taxable income in this range (no ISR applied).")
+            print("\n!!!!! No taxable income in this range (no ISR applied). !!!!!\n")
             return
 
-        # Buscar en tabla ISR con búsqueda binaria
         lim_inf, lim_sup, cuota_fija, porcentaje = self.files.buscar_isr_en_tabla(net_income)
         impuesto = cuota_fija + ((net_income - lim_inf) * (porcentaje / 100))
         tasa_efectiva = (impuesto / net_income) * 100
 
-        print("📊 ISR Calculation:")
-        print(f"  Range: ${lim_inf:,.2f} – ${lim_sup:,.2f}")
-        print(f"  Fixed Quota: ${cuota_fija:,.2f}")
-        print(f"  Rate: {porcentaje:.2f}% on excess over ${lim_inf:,.2f}")
-        print(f"  💵 ISR to pay: ${impuesto:,.2f}")
-        print(f"  📈 Effective tax rate: {tasa_efectiva:.2f}%\n")
+        print("ISR Calculation:")
+        print(f"\tRange: ${lim_inf:,.2f} – ${lim_sup:,.2f}")
+        print(f"\tFixed Quota: ${cuota_fija:,.2f}")
+        print(f"\tRate: {porcentaje:.2f}% on excess over ${lim_inf:,.2f}")
+        print(f"\tISR to pay: ${impuesto:,.2f}")
+        print(f"\tEffective tax rate: {tasa_efectiva:.2f}%\n")
 
-        # Preguntar si desea guardar el reporte ISR
         save = input("Generate ISR report file? (y/n): ").strip().lower()
         if save == "y":
             existing_reports = [f for f in os.listdir() if f.startswith("ISR report #")]
             report_num = len(existing_reports) + 1
-            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            filename = f"ISR report #{report_num} - {timestamp}.txt"
+            filename = f"ISR report #{report_num}.txt"
             with open(filename, "w", encoding="utf-8") as f:
                 f.write("ISR Report\n")
                 f.write(f"User: {self.current_user.name}\n")
@@ -936,46 +884,35 @@ class System:
                 f.write(f"Rate: {porcentaje:.2f}%\n")
                 f.write(f"ISR to Pay: ${impuesto:,.2f}\n")
                 f.write(f"Effective Tax Rate: {tasa_efectiva:.2f}%\n")
-            print(f"✅ ISR report generated: {filename}")
+            print(f"\n!!!!! ISR report generated: {filename} !!!!!\n")
 
 # ================================================ EJECUCIÓN ================================================
 if __name__ == "__main__":
     S = System()
-    # Login loop
     while True:
-        print("\n\n\n\n=============== Login ===============")
-        try:
-            enter = S.login(int(input("Enter your ID: ")), input("Enter your Password: "))
-        except ValueError:
-            print("❌ Invalid ID format.")
+        print("\n\n\n\n============================== Login ==============================\n")
+        try: enter = S.login(int(input("Enter your ID: ")), input("Enter your Password: "))
+        except:
+            print("\n!!!!! Invalid ID format ¡¡¡¡¡\n")
             enter = False
         if enter == True:
             break
         else:
             try:
-                if int(input("0. Exit or 1. Retry: ")) == 0:
-                    print("\n.....................leaving the system, see you later.....................\n\n\n")
+                if int(input("0 -> Exit or any -> Retry: ")) == 0:
+                    print("\n============================== Exiting the system, goodbye ==============================\n\n\n")
                     break
-            except ValueError:
-                continue
+            except: continue
 
-    # Main menu
-    while getattr(S, "current_user", None) is not None:
+    while enter:
         op = S.show_menu()
-        if op == 1:
-            S.register_transaction()
-        elif op == 2:
-            S.view_transaction()
-        elif op == 3:
-            S.modify_transaction()
-        elif op == 4:
-            S.delete_transaction()
-        elif op == 5:
-            S.generate_report()
-        elif op == 6:
-            S.calculate_taxes()
+        if op == 1: S.register_transaction()
+        elif op == 2: S.view_transaction()
+        elif op == 3: S.modify_transaction()
+        elif op == 4: S.delete_transaction()
+        elif op == 5: S.generate_report()
+        elif op == 6: S.calculate_taxes()
         elif op == 7:
             S.logout()
             break
-        else:
-            print("Invalid option.")
+        else: print("Invalid option.")

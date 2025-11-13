@@ -10000,16 +10000,6 @@
         "description": "Compra en l\u00ednea"
     },
     {
-        "id": 1002,
-        "user_id": 1,
-        "amount": 500.0,
-        "category": "Donation",
-        "date": "2025-11-05",
-        "is_deductible": 1,
-        "is_income": 1,
-        "description": "sssssssssss"
-    },
-    {
         "id": 1005,
         "user_id": 1,
         "amount": 5000.0,
@@ -10018,5 +10008,75 @@
         "is_deductible": 0,
         "is_income": 1,
         "description": "N\u00f3mina"
+    },
+    {
+        "id": 1006,
+        "user_id": 1,
+        "amount": 1234.0,
+        "category": "Education",
+        "date": "2025-11-12",
+        "is_deductible": 0,
+        "is_income": 1,
+        "description": "hasttt"
+    },
+    {
+        "id": 1007,
+        "user_id": 1,
+        "amount": 100000.0,
+        "category": "Education",
+        "date": "2025-11-12",
+        "is_deductible": 1,
+        "is_income": 0,
+        "description": "Cursos"
+    },
+    {
+        "id": 1008,
+        "user_id": 1,
+        "amount": 23445.0,
+        "category": "Salary",
+        "date": "2025-11-12",
+        "is_deductible": 1,
+        "is_income": 1,
+        "description": "Salario sip"
+    },
+    {
+        "id": 1009,
+        "user_id": 1,
+        "amount": 1000.0,
+        "category": "Other",
+        "date": "2025-11-12",
+        "is_deductible": 1,
+        "is_income": 0,
+        "description": "Comidita"
+    },
+    {
+        "id": 1010,
+        "user_id": 1,
+        "amount": 1.0,
+        "category": "Salary",
+        "date": "2025-11-12",
+        "is_deductible": 1,
+        "is_income": 1,
+        "description": "1"
+    },
+    {
+        "id": 1011,
+        "user_id": 1,
+        "amount": 12000.0,
+        "category": "Food",
+        "date": "2025-11-12",
+        "is_deductible": 0,
+        "is_income": 1,
+        "description": "Gastos varios"
+    },
+    {
+        "id": 1012,
+        "user_id": 1,
+        "amount": 1234.0,
+        "category": "Investment",
+        "date": "2025-11-13",
+        "is_deductible": 1,
+        "is_income": 1,
+        "description": "No lo s\u00e9"
     }
 ]

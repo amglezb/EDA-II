@@ -1,4 +1,4 @@
-gcc -fopenmp 02_hello_parallel.c -o 02_hello_parallel
+gcc -fopenmp 09_schedule_dynamic.c -o 09_schedule_dynamic
 
 ssh -oHostKeyAlgorithms=+ssh-dss -oPubkeyAcceptedAlgorithms=+ssh-rsa edaII04alu12@132.248.59.142 -p 99
 
