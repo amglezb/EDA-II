@@ -342,15 +342,15 @@ class System:
         if user:
             self.current_user = user
             self.files.secondary_trees(user.id)
-            print(f"{'!!!!! Welcome ' + user.name + ' ¡¡¡¡¡':^70}")
+            print(f"{'!!!!! Welcome ' + user.name + ' ¡¡¡¡¡':^100}")
             return True
         else:
-            print(f"{'!!!!! Invalid user ID or password. !!!!!':^70}")
+            print(f"{'!!!!! Invalid user ID or password. !!!!!':^100}")
             return False
 
     def logout(self): # Cierra la sesión actual y limpia los árboles.
         if self.current_user:
-            print(f"{'!!!!! Logged out for ' + self.current_user.name + ' !!!!!':^70}")
+            print(f"\n\n{'!!!!! Logged out for ' + self.current_user.name + ' !!!!!':^100}\n\n")
             self.current_user = None
             self.files.amount_tree = BTree(2)
             self.files.category_tree = BTree(2)
@@ -360,29 +360,29 @@ class System:
             self.files.current_user_id = None
 
     def menu(self): # Muestra el menú principal y recibe la opción del usuario.
-        print(f"\n{'='*70}\n{'SYSTEM MENU':^70}\n{'='*70}\n{'1. Register New Transaction':^70}\n{'2. View Transaction Data':^70}\n{'3. Modify Transaction Data':^70}\n{'4. Delete Transaction':^70}\n{'5. Generate Transaction Report':^70}\n{'6. Calculate Taxes (ISR)':^70}\n{'7. Logout':^70}\n{'='*70}")
+        print(f"\n{'='*100}\n{'MENU':^100}\n{'='*100}\n{'1. Register New Transaction':^100}\n{'2. View Transaction Data':^100}\n{'3. Modify Transaction Data':^100}\n{'4. Delete Transaction':^100}\n{'5. Generate Transaction Report':^100}\n{'6. Calculate Taxes (ISR)':^100}\n{'7. Logout':^100}\n{'='*100}")
         while True:
             try: 
                 option = int(input("Select an option: "))
                 if 1 <= option <= 7:
                     return option
-                else: print(f"\n{'!!!!! Invalid option. Please enter a number between 1 and 7. !!!!!':^70}")
-            except: print(f"\n{'!!!!! Invalid input. Please enter a number. !!!!!':^70}")
+                else: print(f"\n{'!!!!! Invalid option. Please enter a number between 1 and 7. !!!!!':^100}")
+            except: print(f"\n{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
 
     def add_txn(self): # Solicita datos y registra una nueva transacción.
         if not self.current_user:
-            print(f"{'!!!!! You must log in first. !!!!!':^70}")
+            print(f"{'!!!!! You must log in first. !!!!!':^100}")
             return
-        print("\n========== REGISTER NEW TRANSACTION ==========")
+        print(f"\n{'='*100}\n{'REGISTER NEW TRANSACTION':^100}\n{'='*100}\n")
         while True:
             try:
                 amount_input = input("Amount: ")
                 amount = float(amount_input)
                 if amount <= 0:
-                    print(f"{'!!!!! Amount must be greater than 0. !!!!!':^70}")
+                    print(f"{'!!!!! Amount must be greater than 0. !!!!!':^100}")
                     continue
                 break
-            except: print(f"{'!!!!! Invalid input. Please enter a numeric amount. !!!!!':^70}")
+            except: print(f"{'!!!!! Invalid input. Please enter a numeric amount. !!!!!':^100}")
 
         while True:
             try:
@@ -394,9 +394,9 @@ class System:
                     is_deductible = 0
                     break
                 else:
-                    print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^70}")
+                    print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^100}")
                     continue
-            except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^70}")
+            except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^100}")
 
         while True:
             try:
@@ -408,9 +408,9 @@ class System:
                     is_income = 0
                     break
                 else:
-                    print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^70}")
+                    print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^100}")
                     continue
-            except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^70}")
+            except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^100}")
 
         categories = ["Salary", "Donation", "Investment", "Housing", "Food", "Health", "Transport", "Education", "Debts", "Other"]
         print("\nAvailable Categories:")
@@ -421,50 +421,50 @@ class System:
                 cat_choice_input = input("Select category: ")
                 cat_choice = int(cat_choice_input)
                 if cat_choice < 1 or cat_choice > len(categories):
-                    print(f"{'!!!!! Invalid category number. !!!!!':^70}")
+                    print(f"{'!!!!! Invalid category number. !!!!!':^100}")
                     continue
                 category = categories[cat_choice - 1]
                 break
-            except: print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^70}")
+            except: print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
 
         description = input("Description: ").strip()
-        if not description: print(f"{'!!!!! Empty description. Transaction will be saved without description. !!!!!':^70}")
+        if not description: print(f"{'!!!!! Empty description. Transaction will be saved without description. !!!!!':^100}")
 
         trans_id = self.files.new_id()
         date = datetime.now().strftime("%Y-%m-%d")
         new_trans = Transaction(trans_id, self.current_user.id, amount, category, date, is_deductible, is_income, description)
         self.files.save_txn(new_trans)
-        print(f"{'!!!!! Transaction #' + str(trans_id) + ' registered successfully. !!!!!':^70}")
+        print(f"{'!!!!! Transaction #' + str(trans_id) + ' registered successfully. !!!!!':^100}")
 
     def view_txn(self): # Muestra una transacción específica.
-        print("\n========== VIEW TRANSACTION ==========")
+        print(f"\n{'='*100}\n{'VIEW TRANSACTION':^100}\n{'='*100}\n")
         while True:
             try:
                 trans_id_input = input("Enter transaction ID: ")
                 trans_id = int(trans_id_input)
                 break
             except:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^70}")
+                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
         
         trans = self.files.search_specific_txn(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^70}")
+            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^100}")
             return
         print(f"\n========== Transaction #{trans.id} ========== \n\tCategory: {trans.category}\n\tAmount: ${trans.amount}\n\tDate: {trans.date}\n\tDeductible: {'Yes' if trans.is_deductible else 'No'}\n\tType: {'Income' if trans.is_income else 'Expense'}\n\tDescription: {trans.description} \n========================================")
 
     def edit_txn(self): # Permite modificar campos de una transacción (monto, tipo, categoría, etc.).
-        print("\n========== MODIFY TRANSACTION ==========")
+        print(f"\n{'='*100}\n{'MODIFY TRANSACTION':^100}\n{'='*100}\n")
         while True:
             try:
                 trans_id_input = input("Enter transaction ID: ")
                 trans_id = int(trans_id_input)
                 break
             except:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^70}")
+                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
         
         trans = self.files.search_specific_txn(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^70}")
+            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^100}")
             return
 
         while True:
@@ -473,7 +473,7 @@ class System:
                 op_input = input("Option: ")
                 op = int(op_input)
             except:
-                print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^70}")
+                print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
                 continue
             
             if op == 6:
@@ -482,7 +482,7 @@ class System:
             field_map = {1: "amount", 2: "is_deductible", 3: "is_income", 4: "category", 5: "description"}
             field = field_map.get(op)
             if not field:
-                print(f"{'!!!!! Invalid option. Please enter a number between 1 and 6. !!!!!':^70}")
+                print(f"{'!!!!! Invalid option. Please enter a number between 1 and 6. !!!!!':^100}")
                 continue
 
             new_value = input(f"Enter new value for {field}: ")
@@ -492,13 +492,13 @@ class System:
                     try:
                         new_value_f = float(new_value)
                         if new_value_f <= 0:
-                            print(f"{'!!!!! Amount must be greater than 0. !!!!!':^70}")
+                            print(f"{'!!!!! Amount must be greater than 0. !!!!!':^100}")
                             new_value = input(f"Enter new value for {field}: ")
                             continue
                         new_value = new_value_f
                         break
                     except:
-                        print(f"{'!!!!! Invalid number. !!!!!':^70}")
+                        print(f"{'!!!!! Invalid number. !!!!!':^100}")
                         new_value = input(f"Enter new value for {field}: ")
                         
             if field in ["is_deductible", "is_income"]:
@@ -513,9 +513,9 @@ class System:
                             new_value = 0
                             break
                         else:
-                            print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^100}")
                             continue
-                    except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid input. Please enter y or n. !!!!!':^100}")
 
                         
             elif field == "category":
@@ -524,78 +524,77 @@ class System:
                     try:
                         new_idx = int(new_value)
                         if new_idx < 1 or new_idx > len(categories):
-                            print(f"{'!!!!! Invalid category number. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid category number. !!!!!':^100}")
                             new_value = input(f"Enter new value for {field}: ")
                             continue
                         new_value = categories[new_idx - 1]
                         break
                     except:
-                        print(f"{'!!!!! Invalid input. Please enter a number corresponding to category. !!!!!':^70}")
+                        print(f"{'!!!!! Invalid input. Please enter a number corresponding to category. !!!!!':^100}")
                         new_value = input(f"Enter new value for {field}: ")
 
             if self.files.update_txn(trans_id, field, new_value):
-                print(f"{'!!!!! Field updated successfully. !!!!!':^70}")
+                print(f"{'!!!!! Field updated successfully. !!!!!':^100}")
             else:
-                print(f"{'!!!!! Update failed. !!!!!':^70}")
+                print(f"{'!!!!! Update failed. !!!!!':^100}")
 
     def delete_txn(self): # Elimina una transacción del sistema.
-        print("\n========== DELETE TRANSACTION ==========")
+        print(f"\n{'='*100}\n{'DELETE TRANSACTION':^100}\n{'='*100}\n")
         while True:
             try:
                 trans_id_input = input("Enter transaction ID to delete: ")
                 trans_id = int(trans_id_input)
                 break
             except:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^70}")
+                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
         
         trans = self.files.search_specific_txn(trans_id)
         if not trans or trans.user_id != self.current_user.id:
-            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^70}")
+            print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^100}")
             return
 
-        if self.files.delete_txn(trans_id): print(f"{'!!!!! Transaction #' + str(trans_id) + ' deleted successfully. !!!!!':^70}")
-        else: print(f"{'!!!!! Transaction not found. !!!!!':^70}")
+        if self.files.delete_txn(trans_id): print(f"{'!!!!! Transaction #' + str(trans_id) + ' deleted successfully. !!!!!':^100}")
+        else: print(f"{'!!!!! Transaction not found. !!!!!':^100}")
 
     def report(self): # Filtra y genera reportes de transacciones según criterios (monto, fecha, tipo, categoría…). (traverse, range y exact search B-Tree)
         if not self.current_user:
-            print(f"{'!!!!! You must log in first to generate a report. !!!!!':^70}")
+            print(f"{'!!!!! You must log in first to generate a report. !!!!!':^100}")
             return
 
         all_trans = self.files.transaction_tree.traverse()
         if not all_trans:
-            print(f"{'!!!!! There are no transactions available to report. !!!!!':^70}")
+            print(f"{'!!!!! There are no transactions available to report. !!!!!':^100}")
             return
-
-        print("\n========== GENERATE REPORT ==========")
-        print("You can filter transactions by multiple criteria.\n")
+        
+        print(f"\n{'='*100}\n{'GENERATE REPORT':^100}\n{'='*100}\n")
 
         all_results = None
         applied_filters = []
         combined_title = []
 
         while True:
-            print("\nSelect a filter criterion:\n1. Amount range\n2. Category\n3. Date range\n4. Is Deductible\n5. Is Income\n7. Undo last filter\n6. Done (generate report)")
+            print("Select a filter criterion:\n1. Amount range\n2. Category\n3. Date range\n4. Is Deductible\n5. Is Income\n6. Done (generate report)\n7. Undo last filter")
 
             while True:
                 try:
                     op_input = input("Option: ")
                     op = int(op_input)
                     break
-                except: print(f"{'!!!!! Invalid input. !!!!!':^70}")
+                except: print(f"{'!!!!! Invalid input. !!!!!':^100}")
 
             if op == 6: break
             
             if op == 7:
                 if not applied_filters:
-                    print(f"{'!!!!! No filters to undo. !!!!!':^70}")
+                    print(f"{'!!!!! No filters to undo. !!!!!':^100}")
                     continue
                 removed_filter = combined_title.pop()
                 applied_filters.pop()
                 if applied_filters: all_results = set.intersection(*applied_filters)
                 else: all_results = None
-                print(f"{'!!!!! Filter undone: ' + removed_filter + ' !!!!!':^70}")
-                if all_results: print(f"{'!!!!! Remaining results: ' + str(len(all_results)) + ' transactions !!!!!':^70}")
-                else: print(f"{'!!!!! No filters active now. !!!!!':^70}")
+                print(f"{'!!!!! Filter undone: ' + removed_filter + ' !!!!!':^100}")
+                if all_results: print(f"{'!!!!! Remaining results: ' + str(len(all_results)) + ' transactions !!!!!':^100}")
+                else: print(f"{'!!!!! No filters active now. !!!!!':^100}")
                 continue
 
             current_set = set()
@@ -609,10 +608,10 @@ class System:
                         min_a = float(min_a_input)
                         max_a = float(max_a_input)
                         if max_a < min_a:
-                            print(f"{'!!!!! Invalid range: maximum amount must be greater than or equal to minimum amount. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid range: maximum amount must be greater than or equal to minimum amount. !!!!!':^100}")
                             continue
                         break
-                    except: print(f"{'!!!!! Invalid input. Please enter numeric values. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid input. Please enter numeric values. !!!!!':^100}")
 
                 found = [d.value for d in self.files.amount_tree.range_search(min_a, max_a)]
                 current_set = {t.id for t in found}
@@ -621,7 +620,7 @@ class System:
             elif op == 2:
                 all_cats = sorted(list({d.key for d in self.files.category_tree.traverse()}))
                 if not all_cats:
-                    print(f"{'!!!!! No categories found for this user. !!!!!':^70}")
+                    print(f"{'!!!!! No categories found for this user. !!!!!':^100}")
                     continue
                 print("\nAvailable categories:")
                 for i, cat in enumerate(all_cats, start=1): print(f"{i}. {cat}")
@@ -631,11 +630,11 @@ class System:
                         selected_input = input("Select a category number: ")
                         selected = int(selected_input)
                         if selected < 1 or selected > len(all_cats):
-                            print(f"{'!!!!! Invalid selection. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid selection. !!!!!':^100}")
                             continue
                         cat = all_cats[selected - 1]
                         break
-                    except: print(f"{'!!!!! Invalid input. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid input. !!!!!':^100}")
                         
                 found = [d.value for d in self.files.category_tree.exact_search(cat)]
                 current_set = {t.id for t in found}
@@ -649,10 +648,10 @@ class System:
                         start_dt = datetime.strptime(start, "%Y-%m-%d")
                         end_dt = datetime.strptime(end, "%Y-%m-%d")
                         if end_dt < start_dt:
-                            print(f"{'!!!!! Invalid range: end date must be the same or after start date. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid range: end date must be the same or after start date. !!!!!':^100}")
                             continue
                         break
-                    except: print(f"{'!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!':^100}")
 
                 found = [d.value for d in self.files.date_tree.range_search(start, end)]
                 found = [t for t in found if t.user_id == self.current_user.id]
@@ -666,7 +665,7 @@ class System:
                         sel_d_input = input("Select option: ")
                         sel_d = int(sel_d_input)
                         break
-                    except: print(f"{'!!!!! Invalid input. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid input. !!!!!':^100}")
 
                 if sel_d == 1:
                     found = [d.value for d in self.files.deductible_tree.exact_search(1)]
@@ -683,7 +682,7 @@ class System:
                     current_set = {t.id for t in all_found}
                     title_part = "Both deductible and not deductible"
                 else:
-                    print(f"{'!!!!! Invalid selection. !!!!!':^70}")
+                    print(f"{'!!!!! Invalid selection. !!!!!':^100}")
                     continue
 
             elif op == 5:
@@ -693,10 +692,10 @@ class System:
                         sel_input = input("Select type: ")
                         sel = int(sel_input)
                         if sel not in [1, 2, 3]:
-                            print(f"{'!!!!! Invalid option. !!!!!':^70}")
+                            print(f"{'!!!!! Invalid option. !!!!!':^100}")
                             continue
                         break
-                    except: print(f"{'!!!!! Invalid input. !!!!!':^70}")
+                    except: print(f"{'!!!!! Invalid input. !!!!!':^100}")
                         
                 if sel == 3:
                     found_income = [d.value for d in self.files.income_tree.exact_search(1)]
@@ -710,7 +709,7 @@ class System:
                     title_part = "Income" if sel == 1 else "Expense"
 
             else:
-                print(f"{'!!!!! Invalid option. !!!!!':^70}")
+                print(f"{'!!!!! Invalid option. !!!!!':^100}")
                 continue
 
             applied_filters.append(current_set)
@@ -719,14 +718,14 @@ class System:
             if applied_filters: all_results = set.intersection(*applied_filters)
             else: all_results = current_set
 
-            print(f"{'!!!!! Filter applied: ' + title_part + ' !!!!!':^70}")
-            print(f"{'!!!!! Remaining results: ' + str(len(all_results)) + ' transactions !!!!!':^70}")
+            print(f"{'!!!!! Filter applied: ' + title_part + ' !!!!!':^100}")
+            print(f"{'!!!!! Remaining results: ' + str(len(all_results)) + ' transactions !!!!!':^100}")
 
             another = input("Add another filter? (y/n): ").strip().lower()
             if another != "y": break
 
         if not all_results:
-            print(f"{'!!!!! No transactions found with the selected filters. !!!!!':^70}")
+            print(f"{'!!!!! No transactions found with the selected filters. !!!!!':^100}")
             return
 
         results = [d.value for d in self.files.transaction_tree.traverse() if d.value.id in all_results and d.value.user_id == self.current_user.id]
@@ -741,7 +740,7 @@ class System:
 
         choice = input("\nGenerate a text report file? (y/n): ").strip().lower()
         if choice != "y":
-            print(f"{'!!!!! Report generation canceled. !!!!!':^70}")
+            print(f"{'!!!!! Report generation canceled. !!!!!':^100}")
             return
 
         existing_reports = [f for f in os.listdir() if f.startswith("transaction report #")]
@@ -756,14 +755,14 @@ class System:
                 f.write(f"ID: {t.id}\nCategory: {t.category}\nAmount: ${t.amount}\nDate: {t.date}\n" f"Description: {t.description}\nDeductible: {'Yes' if t.is_deductible else 'No'}\n" f"Type: {'Income' if t.is_income else 'Expense'}\n")
                 f.write("-" * 50 + "\n")
 
-        print(f"{'!!!!! Report file generated successfully: ' + filename + ' !!!!!':^70}")
+        print(f"{'!!!!! Report file generated successfully: ' + filename + ' !!!!!':^100}")
 
     def isr(self): # Calcula el impuesto ISR sobre los ingresos netos en un rango de fechas y puede generar un archivo de reporte.
         if not self.current_user:
-            print(f"{'!!!!! You must log in first. !!!!!':^70}")
+            print(f"{'!!!!! You must log in first. !!!!!':^100}")
             return
         
-        print("\n========== CALCULATE TAXES (ISR) ==========")
+        print(f"\n{'='*100}\n{'CALCULATE TAXES (ISR)':^100}\n{'='*100}\n")
         while True:
             start = input("Enter start date (YYYY-MM-DD): ")
             end = input("Enter end date (YYYY-MM-DD): ")
@@ -771,17 +770,17 @@ class System:
                 start_dt = datetime.strptime(start, "%Y-%m-%d")
                 end_dt = datetime.strptime(end, "%Y-%m-%d")
                 if end_dt < start_dt:
-                    print(f"{'!!!!! Invalid range: end date must be after start date. !!!!!':^70}")
+                    print(f"{'!!!!! Invalid range: end date must be after start date. !!!!!':^100}")
                     continue
                 break
             except:
-                print(f"{'!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!':^70}")
+                print(f"{'!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!':^100}")
 
         found = [d.value for d in self.files.date_tree.range_search(start, end)]
         all_trans = [t for t in found if t.user_id == self.current_user.id]
 
         if not all_trans:
-            print(f"{'!!!!! No transactions found in this range. !!!!!':^70}")
+            print(f"{'!!!!! No transactions found in this range. !!!!!':^100}")
             return
 
         total_income = sum(t.amount for t in all_trans if t.is_income == 1)
@@ -793,7 +792,7 @@ class System:
         print(f"\tNet Taxable Income: ${net_income:,.2f}\n")
 
         if net_income <= 0:
-            print(f"{'!!!!! No taxable income in this range (no ISR applied). !!!!!':^70}")
+            print(f"{'!!!!! No taxable income in this range (no ISR applied). !!!!!':^100}")
             return
 
         lim_inf, lim_sup, cuota_fija, porcentaje = self.files.binary_search(net_income)
@@ -824,22 +823,22 @@ class System:
                 f.write(f"Rate: {porcentaje:.2f}%\n")
                 f.write(f"ISR to Pay: ${impuesto:,.2f}\n")
                 f.write(f"Effective Tax Rate: {tasa_efectiva:.2f}%\n")
-            print(f"{'!!!!! ISR report generated: ' + filename + ' !!!!!':^70}")
+            print(f"{'!!!!! ISR report generated: ' + filename + ' !!!!!':^100}")
 
 if __name__ == "__main__":
     S = System()
     while True:
-        print(f"\n{'='*70}\n{'LOGIN':^70}\n{'='*70}\n")
+        print(f"\n{'='*100}\n{'LOGIN':^100}\n{'='*100}\n")
         try: enter = S.login(int(input("Enter your ID: ")), input("Enter your Password: "))
         except:
-            print(f"{'!!!!! Invalid ID format ¡¡¡¡¡':^70}")
+            print(f"{'!!!!! Invalid ID format ¡¡¡¡¡':^100}")
             enter = False
         if enter == True: break
         else:
             try:
                 retry_input = input("Retry? (y/n) : ").strip().lower()
                 if retry_input == "n":
-                    print(f"\n{'='*70}\n{'Exiting the system, goodbye':^70}\n{'='*70}\n\n")
+                    print(f"\n{'='*100}\n{'Exiting the system, goodbye':^100}\n{'='*100}\n\n")
                     break
             except: continue
 
@@ -854,4 +853,4 @@ if __name__ == "__main__":
         elif op == 7:
             S.logout()
             break
-        else: print(f"{'!!!!! Invalid option. Please try again. !!!!!':^70}")
+        else: print(f"{'!!!!! Invalid option. Please try again. !!!!!':^100}")

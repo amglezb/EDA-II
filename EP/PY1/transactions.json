@@ -10078,5 +10078,45 @@
         "is_deductible": 1,
         "is_income": 1,
         "description": "No lo s\u00e9"
+    },
+    {
+        "id": 1013,
+        "user_id": 1,
+        "amount": 10000.0,
+        "category": "Salary",
+        "date": "2025-11-13",
+        "is_deductible": 0,
+        "is_income": 1,
+        "description": "1111"
+    },
+    {
+        "id": 1014,
+        "user_id": 1,
+        "amount": 1.0,
+        "category": "Salary",
+        "date": "2025-11-13",
+        "is_deductible": 0,
+        "is_income": 0,
+        "description": "1"
+    },
+    {
+        "id": 1015,
+        "user_id": 1,
+        "amount": 100000.0,
+        "category": "Housing",
+        "date": "2025-11-13",
+        "is_deductible": 1,
+        "is_income": 1,
+        "description": "Varias cosas"
+    },
+    {
+        "id": 1016,
+        "user_id": 1,
+        "amount": 123456.0,
+        "category": "Salary",
+        "date": "2025-11-13",
+        "is_deductible": 1,
+        "is_income": 1,
+        "description": "Sueldo"
     }
 ]
