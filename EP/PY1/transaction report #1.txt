@@ -1,0 +1,28 @@
+Transaction Report
+Filters: Amount $10.0–$10000.0, Category Salary
+User: Abraham Gonzalez
+
+ID: 148
+Category: Salary (1)
+Amount: $9897.46
+Date: 2025-07-10
+Description: Pago de la nómina del mes de septiembre
+Deductible: Yes
+Type: Income
+--------------------------------------------------
+ID: 1
+Category: Salary (1)
+Amount: $10000.0
+Date: 2022-10-07
+Description: Pago de la cuota trimestral del seguro de salud
+Deductible: Yes
+Type: Expense
+--------------------------------------------------
+ID: 1001
+Category: Salary (1)
+Amount: $10000.0
+Date: 2025-11-13
+Description: Holhola
+Deductible: Yes
+Type: Expense
+--------------------------------------------------
