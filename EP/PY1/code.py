@@ -163,11 +163,11 @@ class BTree:
         return current.keys[current.n - 1]
 
 class FileController:
-    cats = [None, "Salary", "Donation", "Investment", "Housing", "Food", "Health", "Transport", "Education", "Debts", "Other"]
+    cates = [None, "Salary", "Donation", "Investment", "Housing", "Food", "Health", "Transport", "Education", "Debts", "Other"]
 
-    def __init__(self, users_file="users.json", transactions_file="transactions.json"):
-        self.users_file = users_file
-        self.transactions_file = transactions_file
+    def __init__(self):
+        self.users_file = "users.json"
+        self.transactions_file = "transactions.json"
         self.transaction_tree = BTree(2)
         self.users_tree = BTree(2)
         self.amount_tree = BTree(2)
@@ -185,14 +185,12 @@ class FileController:
             idx = int(index)
             if 1 <= idx < len(self.cats):
                 return self.cats[idx]
-        except:
-            pass
+        except: pass
         return "Unknown"
 
     def user_verification(self, user_id, password):
         node = self.users_tree.search(int(user_id))
-        if node and node.value.password == password:
-            return node.value
+        if node and node.value.password == password: return node.value
         return None
 
     def import_txns(self):
@@ -201,8 +199,7 @@ class FileController:
             try:
                 obj = Transaction(t["id"], t["user_id"], t["amount"], t["category"], t["date"], t.get("is_deductible", 0), t.get("is_income", 0), t.get("description", ""))
                 self.transaction_tree.insert(Data(obj.id, obj))
-            except Exception:
-                continue
+            except: continue
 
     def import_users(self):
         users = self.read_json(self.users_file)
@@ -210,8 +207,7 @@ class FileController:
             try:
                 user_obj = User(u["id"], u["name"], u["password"])
                 self.users_tree.insert(Data(user_obj.id, user_obj))
-            except Exception:
-                continue
+            except: continue
 
     def read_json(self, file):
         try:
@@ -222,7 +218,7 @@ class FileController:
             with open(file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 return data if isinstance(data, list) else []
-        except Exception:
+        except:
             with open(file, "w", encoding="utf-8") as f:
                 json.dump([], f)
             return []
@@ -252,22 +248,12 @@ class FileController:
 
     def new_id(self):
         max_node = self.transaction_tree.get_max()
-        if max_node is None:
-            return 1
+        if max_node is None: return 1
         return max_node.value.id + 1
 
     def save_txn(self, transaction):
         transactions = self.read_json(self.transactions_file)
-        transactions.append({
-            "id": transaction.id,
-            "user_id": transaction.user_id,
-            "amount": transaction.amount,
-            "category": transaction.category,
-            "date": transaction.date,
-            "is_deductible": transaction.is_deductible,
-            "is_income": transaction.is_income,
-            "description": transaction.description,
-        })
+        transactions.append({"id": transaction.id, "user_id": transaction.user_id, "amount": transaction.amount, "category": transaction.category, "date": transaction.date, "is_deductible": transaction.is_deductible, "is_income": transaction.is_income, "description": transaction.description})
         self.save_json(self.transactions_file, transactions)
         self.transaction_tree.insert(Data(transaction.id, transaction))
         if self.current_user_id is not None and transaction.user_id == self.current_user_id:
@@ -310,30 +296,25 @@ class FileController:
 
     def delete_txn(self, trans_id, user_id=None):
         node = self.transaction_tree.search(int(trans_id))
-        if not node:
-            return False
+        if not node: return False
 
         txn = node.value
-        if user_id is not None and txn.user_id != int(user_id):
-            return False
+        if user_id is not None and txn.user_id != int(user_id): return False
 
         transactions = self.read_json(self.transactions_file)
         new_transactions = [t for t in transactions if t.get("id") != int(trans_id)]
-        if len(new_transactions) == len(transactions):
-            return False
+        if len(new_transactions) == len(transactions): return False
 
         self.save_json(self.transactions_file, new_transactions)
         self.transaction_tree = BTree(2)
         self.import_txns()
 
-        if self.current_user_id:
-            self.secondary_trees(self.current_user_id)
+        if self.current_user_id: self.secondary_trees(self.current_user_id)
 
         return True
     
     def merge_sort(self, items, key="amount"):
-        if len(items) <= 1:
-            return items
+        if len(items) <= 1: return items
         mid = len(items) // 2
         left = self.merge_sort(items[:mid], key)
         right = self.merge_sort(items[mid:], key)
@@ -354,29 +335,14 @@ class FileController:
         return result
 
     def binary_search(self, income):
-        table = [
-            (0.01, 746.04, 0.00, 1.92),
-            (746.05, 6332.05, 14.32, 6.40),
-            (6332.06, 11128.01, 371.83, 10.88),
-            (11128.02, 12935.82, 893.63, 16.00),
-            (12935.83, 15487.71, 1182.88, 17.92),
-            (15487.72, 31236.49, 1640.18, 21.36),
-            (31236.50, 49233.00, 5004.12, 23.52),
-            (49233.01, 93993.90, 9236.89, 30.00),
-            (93993.91, 125325.20, 22665.17, 32.00),
-            (125325.21, 375975.61, 32691.18, 34.00),
-            (375975.62, float("inf"), 117912.32, 35.00),
-        ]
+        table = [(0.01, 746.04, 0.00, 1.92), (746.05, 6332.05, 14.32, 6.40), (6332.06, 11128.01, 371.83, 10.88), (11128.02, 12935.82, 893.63, 16.00), (12935.83, 15487.71, 1182.88, 17.92), (15487.72, 31236.49, 1640.18, 21.36), (31236.50, 49233.00, 5004.12, 23.52), (49233.01, 93993.90, 9236.89, 30.00), (93993.91, 125325.20, 22665.17, 32.00), (125325.21, 375975.61, 32691.18, 34.00), (375975.62, float("inf"), 117912.32, 35.00)]
         left, right = 0, len(table) - 1
         while left <= right:
             mid = (left + right) // 2
             lower_limit, upper_limit, _, _ = table[mid]
-            if lower_limit <= income <= upper_limit:
-                return table[mid]
-            elif income < lower_limit:
-                right = mid - 1
-            else:
-                left = mid + 1
+            if lower_limit <= income <= upper_limit: return table[mid]
+            elif income < lower_limit: right = mid - 1
+            else: left = mid + 1
         return table[-1]
 
 class System:
@@ -385,10 +351,8 @@ class System:
         self.current_user = None
 
     def login(self, user_id, password):
-        try:
-            user = self.files.user_verification(int(user_id), password)
-        except Exception:
-            return False
+        try: user = self.files.user_verification(user_id, password)
+        except: return False
         if user:
             self.current_user = user
             self.files.secondary_trees(user.id)
@@ -413,11 +377,9 @@ class System:
         while True:
             try:
                 op = int(input("Select an option: "))
-                if 1 <= op <= 7:
-                    return op
+                if 1 <= op <= 7: return op
                 print(f"{'!!!!! Invalid option. Please enter a number between 1 and 7. !!!!!':^100}")
-            except Exception:
-                print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
 
     def add_txn(self):
         if not self.current_user:
@@ -430,8 +392,7 @@ class System:
                     print(f"{'!!!!! Amount must be greater than 0. !!!!!':^100}")
                     continue
                 break
-            except Exception:
-                print(f"{'!!!!! Invalid input. Please enter a numeric amount. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid input. Please enter a numeric amount. !!!!!':^100}")
         while True:
             deductible = input("Is deductible? (y/n): ").strip().lower()
             if deductible == "y":
@@ -450,8 +411,8 @@ class System:
                 is_income = 0
                 break
             print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^100}")
-        cats = FileController.cats[1:]
-        print("\nAvailable cats:")
+        cats = FileController.cates[1:]
+        print("\n\nAvailable cats:")
         for i, cat in enumerate(cats, 1):
             print(f"{i}. {cat}")
         while True:
@@ -462,8 +423,7 @@ class System:
                     continue
                 category = cat_choice
                 break
-            except Exception:
-                print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
         description = input("Description: ").strip()
         trans_id = self.files.new_id()
         date = datetime.now().strftime("%Y-%m-%d")
@@ -477,8 +437,7 @@ class System:
             try:
                 trans_id = int(input("Enter transaction ID: "))
                 break
-            except Exception:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
         trans = self.files.search_specific_txn(trans_id)
         if not trans or trans.user_id != self.current_user.id:
             print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^100}")
@@ -492,8 +451,7 @@ class System:
             try:
                 trans_id = int(input("Enter transaction ID: "))
                 break
-            except Exception:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
         trans = self.files.search_specific_txn(trans_id)
         if not trans or trans.user_id != self.current_user.id:
             print(f"{'!!!!! Transaction not found or unavailable. !!!!!':^100}")
@@ -502,11 +460,10 @@ class System:
             print("\nSelect field to modify:\n1. Amount\n2. Is Deductible\n3. Is Income\n4. Category\n5. Description\n6. Exit")
             try:
                 op = int(input("Option: "))
-            except Exception:
+            except:
                 print(f"{'!!!!! Invalid input. Please enter a number. !!!!!':^100}")
                 continue
-            if op == 6:
-                break
+            if op == 6: break
             field_map = {1: "amount", 2: "is_deductible", 3: "is_income", 4: "category", 5: "description"}
             field = field_map.get(op)
             if not field:
@@ -520,8 +477,7 @@ class System:
                             print(f"{'!!!!! Amount must be greater than 0. !!!!!':^100}")
                             continue
                         break
-                    except Exception:
-                        print(f"{'!!!!! Invalid number. !!!!!':^100}")
+                    except: print(f"{'!!!!! Invalid number. !!!!!':^100}")
                 ok = self.files.update_txn(trans_id, field, new_value)
             elif field in ["is_deductible", "is_income"]:
                 while True:
@@ -535,7 +491,7 @@ class System:
                     print(f"{'!!!!! Invalid option. Please enter y or n. !!!!!':^100}")
                 ok = self.files.update_txn(trans_id, field, nv)
             elif field == "category":
-                cats = FileController.cats[1:]
+                cats = FileController.cates[1:]
                 print("Available cats:")
                 for i, cat in enumerate(cats, 1):
                     print(f"{i}. {cat}")
@@ -546,16 +502,13 @@ class System:
                             print(f"{'!!!!! Invalid category number. !!!!!':^100}")
                             continue
                         break
-                    except Exception:
-                        print(f"{'!!!!! Invalid input. Please enter a number corresponding to category. !!!!!':^100}")
+                    except: print(f"{'!!!!! Invalid input. Please enter a number corresponding to category. !!!!!':^100}")
                 ok = self.files.update_txn(trans_id, field, new_idx)
             else:
                 new_text = input(f"Enter new value for {field}: ")
                 ok = self.files.update_txn(trans_id, field, new_text)
-            if ok:
-                print(f"{'!!!!! Field updated successfully. !!!!!':^100}")
-            else:
-                print(f"{'!!!!! Update failed. !!!!!':^100}")
+            if ok: print(f"{'!!!!! Field updated successfully. !!!!!':^100}")
+            else: print(f"{'!!!!! Update failed. !!!!!':^100}")
 
     def delete_txn(self):
         print(f"\n{'='*100}\n{'DELETE TRANSACTION':^100}\n{'='*100}\n")
@@ -563,14 +516,11 @@ class System:
             try:
                 trans_id = int(input("Enter transaction ID to delete: "))
                 break
-            except:
-                print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
+            except: print(f"{'!!!!! Invalid ID. Please enter a number. !!!!!':^100}")
 
         ok = self.files.delete_txn(trans_id, self.current_user.id)
-        if ok:
-            print(f"{'!!!!! Transaction deleted successfully. !!!!!':^100}")
-        else:
-            print(f"{'!!!!! You can only delete your own transactions or the ID does not exist. !!!!!':^100}")
+        if ok: print(f"{'!!!!! Transaction deleted successfully. !!!!!':^100}")
+        else: print(f"{'!!!!! You can only delete your own transactions or the ID does not exist. !!!!!':^100}")
 
     def report(self):
         if not self.current_user:
@@ -586,13 +536,11 @@ class System:
         all_results = None
         while True:
             print("Select a filter criterion:\n1. Amount range\n2. Category\n3. Date range\n4. Is Deductible\n5. Is Income\n6. Done (generate report)\n7. Undo last filter")
-            try:
-                op = int(input("Option: "))
-            except Exception:
+            try: op = int(input("Option: "))
+            except:
                 print(f"{'!!!!! Invalid input. !!!!!':^100}")
                 continue
-            if op == 6:
-                break
+            if op == 6: break
             if op == 7:
                 if not applied_filters:
                     print(f"{'!!!!! No filters to undo. !!!!!':^100}")
@@ -611,7 +559,7 @@ class System:
                     if max_a < min_a:
                         print(f"{'!!!!! Invalid range: maximum amount must be greater than or equal to minimum amount. !!!!!':^100}")
                         continue
-                except Exception:
+                except:
                     print(f"{'!!!!! Invalid input. Please enter numeric values. !!!!!':^100}")
                     continue
                 found = [d.value for d in self.files.amount_tree.range_search(min_a, max_a)]
@@ -625,9 +573,8 @@ class System:
                 print("\nAvailable cats:")
                 for i, cat in enumerate(all_cats, start=1):
                     print(f"{i}. {self.files.category_name(cat)} ({cat})")
-                try:
-                    selected = int(input("Select a category number: "))
-                except Exception:
+                try: selected = int(input("Select a category number: "))
+                except:
                     print(f"{'!!!!! Invalid input. !!!!!':^100}")
                     continue
                 if selected < 1 or selected > len(all_cats):
@@ -646,7 +593,7 @@ class System:
                     if end_dt < start_dt:
                         print(f"{'!!!!! Invalid range: end date must be the same or after start date. !!!!!':^100}")
                         continue
-                except Exception:
+                except:
                     print(f"{'!!!!! Invalid date format. Please use YYYY-MM-DD. !!!!!':^100}")
                     continue
                 found = [d.value for d in self.files.date_tree.range_search(start, end)]
@@ -655,9 +602,8 @@ class System:
                 title_part = f"Dates {start}–{end}"
             elif op == 4:
                 print("1. Only Deductible\n2. Only Not Deductible\n3. Both")
-                try:
-                    sel_d = int(input("Select option: "))
-                except Exception:
+                try: sel_d = int(input("Select option: "))
+                except:
                     print(f"{'!!!!! Invalid input. !!!!!':^100}")
                     continue
                 if sel_d == 1:
@@ -679,9 +625,8 @@ class System:
                     continue
             elif op == 5:
                 print("1. Income\n2. Expense\n3. Both")
-                try:
-                    sel = int(input("Select type: "))
-                except Exception:
+                try: sel = int(input("Select type: "))
+                except:
                     print(f"{'!!!!! Invalid input. !!!!!':^100}")
                     continue
                 if sel == 3:
@@ -795,20 +740,13 @@ if __name__ == "__main__":
                 exit(0)
     while True:
         op = S.menu()
-        if op == 1:
-            S.add_txn()
-        elif op == 2:
-            S.view_txn()
-        elif op == 3:
-            S.edit_txn()
-        elif op == 4:
-            S.delete_txn()
-        elif op == 5:
-            S.report()
-        elif op == 6:
-            S.isr()
+        if op == 1: S.add_txn()
+        elif op == 2: S.view_txn()
+        elif op == 3: S.edit_txn()
+        elif op == 4: S.delete_txn()
+        elif op == 5: S.report()
+        elif op == 6: S.isr()
         elif op == 7:
             S.logout()
             break
-        else:
-            print(f"{'!!!!! Invalid option. Please try again. !!!!!':^100}")
+        else: print(f"{'!!!!! Invalid option. Please try again. !!!!!':^100}")
