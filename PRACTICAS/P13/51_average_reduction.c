@@ -1,20 +1,20 @@
-#include <stdio.h>
-#include <omp.h>
+#include<stdio.h>
+#include<omp.h>
 #define MAX 5
 int main() {
-    double t0 = omp_get_wtime();
     double ave=0.0, A[MAX];
     int i;
     for (i=0; i<MAX; i++) {
         A[i] = i+1.0;
     }
+    double i_time, f_time;
+    i_time = omp_get_wtime();
     #pragma omp parallel for reduction(+: ave)
     for (i=0; i<MAX; i++) {
         ave += A[i];
     }
     ave /= MAX;
-    printf("%f\n",ave);
-    double t1 = omp_get_wtime();
-    printf("Tiempo = %.3f ms\n", (t1-t0)*1000.0);
+    f_time = omp_get_wtime();
+    printf("%f\nTime:%f", ave, f_time - i_time);
     return 0;
 }
