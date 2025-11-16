@@ -1,43 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <omp.h>
-#define N 500
-#define RA N
-#define CA N
-#define CB N
-#define RB N
-void multiply_serial(int A[RA][CA], int B[RB][CB], int C[RA][CB]) {
-    int i, j, k, suma;
-    for (i=0; i<CB; i++){
-        for (j=0; j<RA; j++){
-            suma = 0;
-            for (k=0; k<CA; k++){
-                suma += A[j][k] * B[k][i];
-            }
-            C[j][i] = suma;
+#define RA 500
+#define CA 1000
+#define CB 500
+int A[RA][CA];
+int B[CA][CB];
+int C[RA][CB];
+void initialize_matrices() {
+    int i, j;
+    for (i = 0; i < RA; i++) {
+        for (j = 0; j < CA; j++) {
+            A[i][j] = rand() % 10;
+        }
+    }
+    for (i = 0; i < CA; i++) {
+        for (j = 0; j < CB; j++) {
+            B[i][j] = rand() % 10;
+        }
+    }
+    for (i = 0; i < RA; i++) {
+        for (j = 0; j < CB; j++) {
+            C[i][j] = 0;
         }
     }
 }
-void initialize_matrices(int A[RA][CA], int B[RB][CB]) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            A[i][j] = rand() % 10;
-            B[i][j] = rand() % 10;
+void multiply_serial() {
+    int i, j, k, suma;
+    for (i = 0; i < RA; i++) {
+        for (j = 0; j < CB; j++) {
+            suma = 0;
+            for (k = 0; k < CA; k++) {
+                suma += A[i][k] * B[k][j];
+            }
+            C[i][j] = suma;
         }
     }
 }
 
 int main() {
-    int A[RA][CA], B[RB][CB], C[RA][CB];
-    double start_time, end_time;
-    srand(time(NULL));
-    initialize_matrices(A, B);
-    start_time = omp_get_wtime();
-    multiply_serial(A, B, C);
-    end_time = omp_get_wtime();
-    printf("--- Multiplicacion Serial (%dx%d) ---\n", N, N);
-    printf("Tiempo: %f\n", end_time - start_time);
-
+    double inicio, fin;
+    initialize_matrices();
+    inicio = omp_get_wtime();
+    multiply_serial();
+    fin = omp_get_wtime();
+    printf("Tiempo: %f\n", fin - inicio);
     return 0;
 }
